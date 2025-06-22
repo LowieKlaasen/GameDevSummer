@@ -8,6 +8,9 @@ namespace GameDev
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Texture2D _heroTexture;
+
+        private Hero hero;
 
         public Game1()
         {
@@ -21,6 +24,8 @@ namespace GameDev
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            hero = new Hero(_heroTexture);
         }
 
         protected override void LoadContent()
@@ -28,6 +33,7 @@ namespace GameDev
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            _heroTexture = Content.Load<Texture2D>("Rogue_Walking");
         }
 
         protected override void Update(GameTime gameTime)
@@ -36,15 +42,18 @@ namespace GameDev
                 Exit();
 
             // TODO: Add your update logic here
-
+            hero.update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
+            
+            hero.draw(_spriteBatch);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
