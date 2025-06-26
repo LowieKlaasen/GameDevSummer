@@ -42,7 +42,7 @@ namespace GameDev
                 Exit();
 
             // TODO: Add your update logic here
-            hero.update(gameTime);
+            hero.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -51,7 +51,7 @@ namespace GameDev
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
             
-            hero.draw(_spriteBatch);
+            hero.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
