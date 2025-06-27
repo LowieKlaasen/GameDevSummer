@@ -1,24 +1,51 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GameDev
 {
-    internal class Hero : IGameObject
+    internal class Hero : IGameObject, IMovable
     {
         private Texture2D texture;
         Animation animation;
 
         private Vector2 position;
         private Vector2 speed;
+        //private Vector2 acceleration;
 
-        public Hero(Texture2D texture)
+        private IInputReader inputReader;
+        private MovementManager movementManager;
+
+        public Hero(Texture2D texture, IInputReader inputReader)
         {
             this.texture = texture;
+            this.inputReader = inputReader;
+            movementManager = new MovementManager();
             animation = new Animation();
             animation.GetFramesFromTextureProperties(texture.Width, texture.Height, 4, 2);
 
-            position = new Vector2(0,0);
+            position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
+            //accelaration = new Vector2(0.1f, 0.1f);
+        }
+
+        // IMovable implementation
+        public Vector2 Position
+        {
+            get => position;
+            set => position = value;
+        }
+
+        public Vector2 Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
+
+        public IInputReader InputReader
+        {
+            get => inputReader;
+            set => inputReader = value;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -28,21 +55,14 @@ namespace GameDev
 
         public void Update(GameTime gameTime)
         {
-            animation.Update(gameTime);
             Move();
+
+            animation.Update(gameTime);
         }
 
-        public void Move()
+        private void Move()
         {
-            position += speed;
-            if (position.X > 800 - (texture.Width /2) || position.X < 0)
-            {
-                speed.X *= -1;
-            }
-            if (position.Y > 480 - (texture.Height /2) || position.Y < 0)
-            {
-                speed.Y *= -1;
-            }
+            movementManager.Move(this);
         }
     }
 }

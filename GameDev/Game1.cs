@@ -25,7 +25,7 @@ namespace GameDev
 
             base.Initialize();
 
-            hero = new Hero(_heroTexture);
+            hero = new Hero(_heroTexture, new KeyboardReader());
         }
 
         protected override void LoadContent()
