@@ -15,6 +15,9 @@ namespace GameDev
         private IInputReader inputReader;
         private MovementManager movementManager;
 
+        // Track the current sprite effect (none or flip horizontally)
+        private SpriteEffects spriteEffect = SpriteEffects.None;
+
         public Hero(Texture2D texture, IInputReader inputReader)
         {
             this.texture = texture;
@@ -49,12 +52,29 @@ namespace GameDev
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White);
+            spriteBatch.Draw(
+                texture,
+                position,
+                animation.CurrentFrame.SourceRectangle,
+                Color.White,
+                0f,
+                Vector2.Zero,
+                1f,
+                spriteEffect,
+                0f
+            );
         }
 
         public void Update(GameTime gameTime)
         {
             Move();
+
+            // Update spriteEffect based on input direction
+            var direction = inputReader.ReadInput();
+            if (direction.X < 0)
+                spriteEffect = SpriteEffects.FlipHorizontally;
+            else if (direction.X > 0)
+                spriteEffect = SpriteEffects.None;
 
             animation.Update(gameTime);
         }
