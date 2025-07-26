@@ -33,7 +33,7 @@ namespace GameDev
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            _heroTexture = Content.Load<Texture2D>("Rogue_running");
+            _heroTexture = Content.Load<Texture2D>("RogueRunning_Cropped");
         }
 
         protected override void Update(GameTime gameTime)

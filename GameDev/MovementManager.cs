@@ -14,7 +14,21 @@
             }
 
             var distance = direction * movable.Speed;
-            movable.Position += distance;
+            var futurePosition = movable.Position + distance;
+
+            if (futurePosition.X < (800 - 160) && futurePosition.X > 160)
+            {
+                movable.Position = futurePosition;
+            }
+
+            if (futurePosition.X < (800 - 128) && futurePosition.X > 0 && futurePosition.Y < (480 - 128) && futurePosition.Y > 0)
+            {
+                //movable.Position = futurePosition;
+                movable.Position += distance;
+            }
+
+            //movable.Position = futurePosition;
+            //movable.Position += distance;
         }
     }
 
