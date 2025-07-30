@@ -12,6 +12,11 @@ namespace GameDev
 
         private Hero hero;
 
+        private Texture2D blokTexture;
+        //private Rectangle heroBlok;
+        private Rectangle staticBlok;
+        private Color backgroundColor;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -26,6 +31,11 @@ namespace GameDev
             base.Initialize();
 
             hero = new Hero(_heroTexture, new KeyboardReader());
+
+            //heroBlok = new Rectangle(10, 10, 50, 50);
+            staticBlok = new Rectangle(100, 100, 50, 50);
+
+            backgroundColor = Color.CornflowerBlue;
         }
 
         protected override void LoadContent()
@@ -34,6 +44,10 @@ namespace GameDev
 
             // TODO: use this.Content to load your game content here
             _heroTexture = Content.Load<Texture2D>("RogueRunning_Cropped");
+
+            blokTexture = new Texture2D(GraphicsDevice, 1, 1);
+            blokTexture.SetData(new[] { Color.White });
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
@@ -43,15 +57,28 @@ namespace GameDev
 
             // TODO: Add your update logic here
             hero.Update(gameTime);
+
+            if (hero.BoundingBox.Intersects(staticBlok))
+            {
+                backgroundColor = Color.Black;
+            }
+            else
+            {
+                backgroundColor = Color.CornflowerBlue;
+            }
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(backgroundColor);
             _spriteBatch.Begin();
             
             hero.Draw(_spriteBatch);
+
+            //_spriteBatch.Draw(blokTexture, heroBlok, Color.Red);
+            _spriteBatch.Draw(blokTexture, staticBlok, Color.Green);
 
             _spriteBatch.End();
 

@@ -1,12 +1,13 @@
-﻿namespace GameDev
+﻿using System;
+
+namespace GameDev
 {
     internal class MovementManager
     {
         public void Move(IMovable movable)
         {
             var direction = movable.InputReader.ReadInput();
-            
-            // Check if the input is destinational using a custom property or method
+
             if (movable.InputReader is IDestinationalInputReader destinationalInputReader && destinationalInputReader.IsDestinationalInput)
             {
                 direction -= movable.Position;
@@ -16,23 +17,19 @@
             var distance = direction * movable.Speed;
             var futurePosition = movable.Position + distance;
 
-            if (futurePosition.X < (800 - 160) && futurePosition.X > 160)
-            {
-                movable.Position = futurePosition;
-            }
+            float minX = 0;
+            float maxX = 800 - 90;
+            float minY = 0;
+            float maxY = 480 - 90;
 
-            if (futurePosition.X < (800 - 128) && futurePosition.X > 0 && futurePosition.Y < (480 - 128) && futurePosition.Y > 0)
-            {
-                //movable.Position = futurePosition;
-                movable.Position += distance;
-            }
+            futurePosition.X = Math.Clamp(futurePosition.X, minX, maxX);
+            futurePosition.Y = Math.Clamp(futurePosition.Y, minY, maxY);
 
-            //movable.Position = futurePosition;
-            //movable.Position += distance;
+            movable.Position = futurePosition;
         }
+
     }
 
-    // Add this interface to define the IsDestinationalInput property
     internal interface IDestinationalInputReader : IInputReader
     {
         bool IsDestinationalInput { get; }

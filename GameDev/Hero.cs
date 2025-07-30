@@ -50,6 +50,19 @@ namespace GameDev
             set => inputReader = value;
         }
 
+        public Rectangle BoundingBox
+        {
+            get
+            {
+                return new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    animation.CurrentFrame.SourceRectangle.Width,
+                    animation.CurrentFrame.SourceRectangle.Height
+                );
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(

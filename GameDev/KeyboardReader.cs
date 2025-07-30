@@ -12,20 +12,20 @@ namespace GameDev
 
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-                direction.X -= 2;
+                direction.X -= 4;
             }
             if (keyboardState.IsKeyDown(Keys.Right))
             {
-                direction.X += 2;
+                direction.X += 4;
             }
 
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                direction.Y -= 2;
+                direction.Y -= 4;
             }
             if (keyboardState.IsKeyDown(Keys.Down))
             {
-                direction.Y += 2;
+                direction.Y += 4;
             }
 
             return direction;
