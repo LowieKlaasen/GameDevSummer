@@ -56,7 +56,7 @@ namespace GameDev
                 Exit();
 
             // TODO: Add your update logic here
-            hero.Update(gameTime);
+            hero.Update(gameTime, new StaticBlock(staticBlok));
 
             if (hero.BoundingBox.Intersects(staticBlok))
             {

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameDev
 {
-    internal class Hero : IGameObject, IMovable
+    internal class Hero : IGameObject, IMovable, ICollidable
     {
         private Texture2D texture;
         Animation animation;
@@ -17,6 +19,8 @@ namespace GameDev
 
         // Track the current sprite effect (none or flip horizontally)
         private SpriteEffects spriteEffect = SpriteEffects.None;
+
+        private CollisionManager collisionManager = new CollisionManager();
 
         public Hero(Texture2D texture, IInputReader inputReader)
         {
@@ -95,6 +99,55 @@ namespace GameDev
         private void Move()
         {
             movementManager.Move(this);
+        }
+
+        // Update & Move colliding
+        public void Update(GameTime gameTime, ICollidable obstacle = null)
+        {
+            Move(obstacle);
+
+            var direction = inputReader.ReadInput();
+            if (direction.X < 0)
+            {
+                spriteEffect = SpriteEffects.FlipHorizontally;
+            }
+            else if (direction.X > 0)
+            {
+                spriteEffect = SpriteEffects.None;
+            }
+
+            animation.Update(gameTime);
+        }
+
+        private void Move(ICollidable obstacle = null)
+        {
+            var direction = inputReader.ReadInput();
+            var distance = direction * speed;
+            var futurePosition = position + distance;
+
+            float minX = 0;
+            float maxX = 800 - 90;
+            float minY = 0;
+            float maxY = 480 - 90;
+            futurePosition.X = Math.Clamp(futurePosition.X, minX, maxX);
+            futurePosition.Y = Math.Clamp(futurePosition.Y, minY, maxY);
+
+            // (animation.CurrentFrame != null) to prevent game from crashing on startup
+            if (obstacle != null && animation.CurrentFrame != null)
+            {
+                var futureBoundingBox = new Rectangle(
+                    (int)futurePosition.X,    
+                    (int)futurePosition.Y,
+                    animation.CurrentFrame.SourceRectangle.Width,
+                    animation.CurrentFrame.SourceRectangle.Height
+                );
+                if (futureBoundingBox.Intersects(obstacle.BoundingBox))
+                {
+                    return;
+                }
+            }
+
+            position = futurePosition;
         }
     }
 }
