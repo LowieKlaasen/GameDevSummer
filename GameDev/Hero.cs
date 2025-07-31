@@ -59,10 +59,10 @@ namespace GameDev
             get
             {
                 return new Rectangle(
-                    (int)position.X,
-                    (int)position.Y,
-                    animation.CurrentFrame.SourceRectangle.Width,
-                    animation.CurrentFrame.SourceRectangle.Height
+                    (int)position.X + 20,
+                    (int)position.Y +20,
+                    animation.CurrentFrame.SourceRectangle.Width - 40,
+                    animation.CurrentFrame.SourceRectangle.Height - 40
                 );
             }
         }
@@ -136,10 +136,10 @@ namespace GameDev
             if (obstacle != null && animation.CurrentFrame != null)
             {
                 var futureBoundingBox = new Rectangle(
-                    (int)futurePosition.X,    
-                    (int)futurePosition.Y,
-                    animation.CurrentFrame.SourceRectangle.Width,
-                    animation.CurrentFrame.SourceRectangle.Height
+                    (int)futurePosition.X + 20,    
+                    (int)futurePosition.Y + 20,
+                    animation.CurrentFrame.SourceRectangle.Width - 40,
+                    animation.CurrentFrame.SourceRectangle.Height - 40
                 );
                 if (futureBoundingBox.Intersects(obstacle.BoundingBox))
                 {

@@ -77,6 +77,31 @@ namespace GameDev
             
             hero.Draw(_spriteBatch);
 
+            // Draw the hero's bounding box as a red rectangle
+            var heroBoundingBox = hero.BoundingBox;
+            Texture2D boundingBoxTexture = new Texture2D(GraphicsDevice, 1, 1);
+            boundingBoxTexture.SetData(new[] { Color.White });
+            _spriteBatch.Draw(
+                boundingBoxTexture,
+                new Rectangle(heroBoundingBox.X, heroBoundingBox.Y, heroBoundingBox.Width, 2), // Top
+                Color.Red
+            );
+            _spriteBatch.Draw(
+                boundingBoxTexture,
+                new Rectangle(heroBoundingBox.X, heroBoundingBox.Y, 2, heroBoundingBox.Height), // Left
+                Color.Red
+            );
+            _spriteBatch.Draw(
+                boundingBoxTexture,
+                new Rectangle(heroBoundingBox.X + heroBoundingBox.Width - 2, heroBoundingBox.Y, 2, heroBoundingBox.Height), // Right
+                Color.Red
+            );
+            _spriteBatch.Draw(
+                boundingBoxTexture,
+                new Rectangle(heroBoundingBox.X, heroBoundingBox.Y + heroBoundingBox.Height - 2, heroBoundingBox.Width, 2), // Bottom
+                Color.Red
+            );
+
             //_spriteBatch.Draw(blokTexture, heroBlok, Color.Red);
             _spriteBatch.Draw(blokTexture, staticBlok, Color.Green);
 
