@@ -104,7 +104,8 @@ namespace GameDev
         // Update & Move colliding
         public void Update(GameTime gameTime, ICollidable obstacle = null)
         {
-            Move(obstacle);
+            // Use MovementManager for all movement
+            MoveWithCollision(obstacle);
 
             var direction = inputReader.ReadInput();
             if (direction.X < 0)
@@ -119,35 +120,28 @@ namespace GameDev
             animation.Update(gameTime);
         }
 
-        private void Move(ICollidable obstacle = null)
+        private void MoveWithCollision(ICollidable obstacle = null)
         {
-            var direction = inputReader.ReadInput();
-            var distance = direction * speed;
-            var futurePosition = position + distance;
+            // Use MovementManager to update position and speed (with gravity)
+            movementManager.Move(this);
 
-            float minX = 0;
-            float maxX = 800 - 90;
-            float minY = 0;
-            float maxY = 480 - 90;
-            futurePosition.X = Math.Clamp(futurePosition.X, minX, maxX);
-            futurePosition.Y = Math.Clamp(futurePosition.Y, minY, maxY);
-
-            // (animation.CurrentFrame != null) to prevent game from crashing on startup
+            // Now check for collision and revert if needed
             if (obstacle != null && animation.CurrentFrame != null)
             {
                 var futureBoundingBox = new Rectangle(
-                    (int)futurePosition.X + 20,    
-                    (int)futurePosition.Y + 20,
+                    (int)position.X + 20,
+                    (int)position.Y + 20,
                     animation.CurrentFrame.SourceRectangle.Width - 40,
                     animation.CurrentFrame.SourceRectangle.Height - 40
                 );
                 if (futureBoundingBox.Intersects(obstacle.BoundingBox))
                 {
-                    return;
+                    // Simple collision response: stop falling
+                    speed.Y = 0;
+                    // Optionally, move hero up so it sits on top of the block
+                    position.Y = obstacle.BoundingBox.Top - (futureBoundingBox.Height + 20);
                 }
             }
-
-            position = futurePosition;
         }
     }
 }

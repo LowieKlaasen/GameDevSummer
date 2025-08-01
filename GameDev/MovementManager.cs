@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace GameDev
 {
@@ -6,21 +7,18 @@ namespace GameDev
     {
         public void Move(IMovable movable)
         {
-            var direction = movable.InputReader.ReadInput();
+            var input = movable.InputReader.ReadInput();
+            movable.Speed = new Vector2(input.X, movable.Speed.Y);
 
-            if (movable.InputReader is IDestinationalInputReader destinationalInputReader && destinationalInputReader.IsDestinationalInput)
-            {
-                direction -= movable.Position;
-                direction.Normalize();
-            }
+            float gravity = 0.5f;
+            movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + gravity);
 
-            var distance = direction * movable.Speed;
-            var futurePosition = movable.Position + distance;
+            var futurePosition = movable.Position + movable.Speed;
 
-            float minX = 0;
-            float maxX = 800 - 90;
+            float minX = -20;
+            float maxX = 800 - 70;
             float minY = 0;
-            float maxY = 480 - 90;
+            float maxY = 480 - 70;
 
             futurePosition.X = Math.Clamp(futurePosition.X, minX, maxX);
             futurePosition.Y = Math.Clamp(futurePosition.Y, minY, maxY);
